@@ -1,7 +1,5 @@
 <template>
-    <div id="app">
-      <router-view></router-view>
-    </div>
+    <div>后台首页面</div>
 </template>
 
 <script>
