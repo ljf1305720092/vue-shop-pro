@@ -1,0 +1,127 @@
+<template>
+  <el-container>
+    <el-header>
+      <div id="logo-box">
+        <img src="../assets/img/heima.png" alt>
+        <span>电商管理后台系统</span>
+      </div>
+      <el-button type="info" @click="logout">退出</el-button>
+    </el-header>
+    <el-container>
+      <el-aside :width="menushow ? '65px' : '200px'">
+        <div
+          style="background:rgb(74, 80, 100);height:25px;
+          line-height:25px;font-size:12px;text-align:center;color:#fff;
+          letter-spacing:0.1em;user-select:none;cursor:pointer"
+          @click="menushow=!menushow"
+        >|||</div>
+        <el-menu
+          background-color="#333744"
+          text-color="#fff"
+          active-text-color="#409EFF"
+          :unique-opened="true"
+          :collapse="menushow"
+          :collapse-transition="menushow"
+        >
+          <el-submenu
+            :index="item.id+''"
+            v-for="(item,k) in menuList"
+            :key="item.id"
+            :style="menushow ? 'width:65px;' : 'width:200px;'"
+          >
+            <template slot="title">
+              <i :class="'iconfont icon-'+menuicon[k]"></i>
+              <span>{{item.authName}}</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item
+                :index="item.id+'-'+item2.id"
+                v-for="item2 in item.children"
+                :key="item2.id"
+              >
+                <i class="el-icon-menu"></i>
+                <span>{{item2.authName }}</span>
+              </el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+        </el-menu>
+      </el-aside>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
+    </el-container>
+  </el-container>
+</template>
+
+<script>
+export default {
+  // 生命周期函数
+  created() {
+    this.getMenuList()
+  },
+  data() {
+    return {
+      menushow: false,
+      //   接收后端返回的数据
+      menuList: [],
+      menuicon: ['users', 'tijikongjian', 'shangpin', 'danju', 'baobiao']
+    }
+  },
+  methods: {
+    async getMenuList() {
+      const { data: res } = await this.$http.get('/menus')
+      //   获取失败处理
+      if (res.meta.status !== 200) {
+        return this.$message.error(res.meta.msg)
+      }
+      this.menuList = res.data
+    },
+    //   退出系统
+    logout() {
+      this.$confirm('你确定要退出吗?', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          window.sessionStorage.removeItem('token')
+          this.$router.push('/login')
+        })
+        .catch(() => {})
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.el-container {
+  height: 100%;
+  .el-header {
+    background: #373d41;
+    padding: 0;
+    padding-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    #logo-box {
+      color: #fff;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      user-select: none;
+      img {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.el-aside {
+  background: #333744;
+}
+.el-main {
+  background: #eaedf1;
+}
+</style>

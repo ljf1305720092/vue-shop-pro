@@ -1,6 +1,6 @@
 <template>
-    <div id="app">
-      <router-view></router-view>
+    <div id="Welconme">
+        <h2>Welconme to our site</h2>
     </div>
 </template>
 
