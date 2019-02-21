@@ -18,10 +18,11 @@
         <el-menu
           background-color="#333744"
           text-color="#fff"
-          active-text-color="#409EFF"
+          active-text-color="#409eff"
           :unique-opened="true"
           :collapse="menushow"
           :collapse-transition="menushow"
+          :router="true"
         >
           <el-submenu
             :index="item.id+''"
@@ -33,16 +34,14 @@
               <i :class="'iconfont icon-'+menuicon[k]"></i>
               <span>{{item.authName}}</span>
             </template>
-            <el-menu-item-group>
               <el-menu-item
-                :index="item.id+'-'+item2.id"
+                :index="item2.path"
                 v-for="item2 in item.children"
                 :key="item2.id"
               >
                 <i class="el-icon-menu"></i>
                 <span>{{item2.authName }}</span>
               </el-menu-item>
-            </el-menu-item-group>
           </el-submenu>
         </el-menu>
       </el-aside>
